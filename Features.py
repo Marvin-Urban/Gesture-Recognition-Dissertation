@@ -13,7 +13,6 @@ def temporal_slope(df: pd.DataFrame, alpha: float = 0.3) -> pd.DataFrame:
     smoothed[0] = arr[0]
     for t in range(1, len(arr)):
         smoothed[t] = alpha * arr[t] + (1 - alpha) * smoothed[t-1]
-    # keep length N (no row drop)
     slope = np.diff(smoothed, axis=0, prepend=smoothed[:1])
     cols = [f"slope_{i}" for i in range(slope.shape[1])]
     return pd.DataFrame(slope, columns=cols)
@@ -25,4 +24,5 @@ def spatial_contrast(df: pd.DataFrame) -> pd.DataFrame:
 
 def rolling_std(df: pd.DataFrame, window: int = 150) -> pd.DataFrame:
     return df.rolling(window=window, min_periods=1).std().add_prefix("std_")
+
 
